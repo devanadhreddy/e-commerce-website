@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopKart</title>
+    <style>
+        /* ==========================================
+   1. GLOBAL STYLES & RESET
+   ========================================== */
+:root {
+    --primary-color: #ff4757;
+    --primary-hover: #e84118;
+    --dark-color: #2f3542;
+    --light-bg: #f1f2f6;
+    --card-bg: #ffffff;
+    --border-radius: 12px;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--light-bg);
+    color: var(--dark-color);
+    padding-bottom: 50px;
+}
+
+/* ==========================================
+   2. NAVBAR STYLES
+   ========================================== */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    padding: 15px 5%;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo img {
+    height: 45px;
+    object-fit: contain;
+}
+
+.search-bar {
+    position: relative;
+    width: 40%;
+}
+
+.search-bar i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a4b0be;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 12px 15px 12px 45px;
+    border: 1px solid #dfe4ea;
+    border-radius: 30px;
+    background: #f8f9fa;
+    font-size: 0.95rem;
+    transition: var(--transition);
+}
+
+.search-bar input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(255, 71, 87, 0.1);
+}
+
+.nav-icons {
+    display: flex;
+    gap: 25px;
+}
+
+.nav-icons a, .end-nav-icon a {
+    text-decoration: none;
+    color: var(--dark-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    transition: var(--transition);
+}
+
+.nav-icons a:hover {
+    color: var(--primary-color);
+}
+
+.end-nav-icon a {
+    background: var(--primary-color);
+    color: white;
+    padding: 10px 22px;
+    border-radius: 25px;
+    box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+}
+
+.end-nav-icon a:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+/* ==========================================
+   3. CART LAYOUT & CONTAINER
+   ========================================== */
+.cart-price-combined {
+    display: flex;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+    gap: 30px;
+}
+
+.cart-items-outerdiv {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Delivery Address Panel */
+.delivery-address {
+    background: var(--card-bg);
+    padding: 24px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border-left: 5px solid var(--primary-color);
+}
+
+.delivery-address h3 {
+    font-size: 1.15rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.delivery-address p {
+    color: #747d8c;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    max-width: 85%;
+}
+
+.edit-adress {
+    position: absolute;
+    right: 24px;
+    top: 24px;
+    background: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.edit-adress:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* ==========================================
+   4. PRODUCT ITEM CARDS
+   ========================================== */
+.cart-items-innerdiv {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transition: var(--transition);
+}
+
+.cart-items-innerdiv:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+.top-section {
+    display: flex;
+    gap: 25px;
+}
+
+.image-quantity {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.product-image {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: #f8f9fa;
+}
+
+/* Elegant Counter Style */
+.quantity {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ced6e0;
+    border-radius: 25px;
+    overflow: hidden;
+    background: #f8f9fa;
+}
+
+#qty-btn {
+    background: transparent;
+    border: none;
+    width: 32px;
+    height: 32px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: var(--dark-color);
+    transition: var(--transition);
+}
+
+#qty-btn:hover {
+    background: #dfe4ea;
+}
+
+.qty-value {
+    width: 35px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+/* Name & Price block */
+.name-price {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+}
+
+.product-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.product-price {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #2ed573;
+}
+
+/* Action Controls Panel */
+.bottom-section {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    border-top: 1px solid #f1f2f6;
+    padding-top: 15px;
+}
+
+.remove-div, .buy-div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    border-radius: 20px;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.remove-div {
+    background: #ffe0e3;
+    color: #ff4757;
+}
+
+.remove-div:hover {
+    background: #ff4757;
+    color: white;
+}
+
+.buy-div {
+    background: #e3faf1;
+    color: #2ed573;
+}
+
+.buy-div:hover {
+    background: #2ed573;
+    color: white;
+}
+
+.remove, .buy {
+    background: transparent;
+    border: none;
+    font-weight: 600;
+    color: inherit;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+/* ==========================================
+   5. PRICE DETAILS PANEL (RIGHT BAR)
+   ========================================== */
+.total-price {
+    flex: 1;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 25px;
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+}
+
+.price-details h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #f1f2f6;
+}
+
+.actual-price-details, .discount-details, .total-price-details {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+.discount-value {
+    color: #2ed573;
+    font-weight: 600;
+}
+
+.total-price-details {
+    border-top: 1px dashed #ced6e0;
+    padding-top: 15px;
+    margin-top: 20px;
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.totalo-price {
+    color: var(--primary-color);
+}
+
+.place-orderdiv {
+    margin-top: 25px;
+}
+
+.placeordero {
+    width: 100%;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(255, 71, 87, 0.3);
+    transition: var(--transition);
+}
+
+.placeordero:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 71, 87, 0.4);
+}
+
+/* ==========================================
+   6. FLOATING ADDRESS FORM MODAL
+   ========================================== */
+#address-form {
+    display: none; /* Controlled dynamically by JS */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #ffffff;
+    padding: 35px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    z-index: 1000;
+    width: 90%;
+    max-width: 500px;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+#address-form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+    color: #57606f;
+}
+
+#address-form input {
+    width: 100%;
+    padding: 10px 14px;
+    margin-bottom: 18px;
+    border: 1px solid #ced6e0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: var(--transition);
+}
+
+#address-form input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.1);
+}
+
+#address-form button[type="submit"] {
+    background: #2ed573;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: var(--transition);
+}
+
+#address-form button[type="submit"]:hover {
+    background: #26af5f;
+}
+
+#address-form .close {
+    background: #f1f2f6;
+    color: #57606f;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+#address-form .close:hover {
+    background: #dfe4ea;
+}
+
+/* ==========================================
+   7. SINGLE ITEM CHECKOUT VIEW PANEL (MODERNIZED)
+   ========================================== */
+.checkout {
+    display: none; /* Controlled dynamically by JS */
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.inner-checkout-div {
+    background: var(--card-bg);
+    width: 100%;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 25px;
+    border-top: 5px solid #2ed573;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.checkout-header {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--dark-color);
+    padding-bottom: 12px;
+    border-bottom: 2px solid #f1f2f6;
+}
+
+.checkout_image-quantity {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.checkout-img-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.checkout_product-image {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: #f8f9fa;
+}
+
+.checkout_quantity {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ced6e0;
+    border-radius: 25px;
+    overflow: hidden;
+    background: #f8f9fa;
+}
+
+#checkout_qty_btn {
+    background: transparent;
+    border: none;
+    width: 32px;
+    height: 32px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: var(--dark-color);
+    transition: var(--transition);
+}
+
+#checkout_qty_btn:hover {
+    background: #dfe4ea;
+}
+
+.checkout_qty-value {
+    width: 35px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.checkout_name-price {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+}
+
+.checkout_product-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.checkout_product-price {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #2ed573;
+}
+
+.checkout-actions {
+    display: flex;
+    justify-content: flex-end;
+    border-top: 1px solid #f1f2f6;
+    padding-top: 15px;
+}
+
+.checkout-place-btn {
+    background: #2ed573;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(46, 213, 115, 0.3);
+    transition: var(--transition);
+}
+
+.checkout-place-btn:hover {
+    background: #26af5f;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(46, 213, 115, 0.4);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .cart-price-combined {
+        flex-direction: column;
+    }
+    .search-bar {
+        display: none; /* Hide search bar on small screens to save space */
+    }
+}
+    </style>
+     
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <img src="{{url_for('static',filename='images/shopkartlogo.png')}}">
+        </div>
+
+        
+    <div class="search-bar">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="Search Your Products.......">
+
+    </div>
+        <div class="nav-icons">
+            <a href="{{url_for('logino')}}">LOGIN</a>
+            <a href="{{url_for('home')}}">HOME</a>
+            <a href="{{url_for('about_us')}}">ABOUT US</a>
+            <a href="{{url_for('selltous')}}">SELL TO US</a>
+
+        </div>
+        <div class="end-nav-icon">
+            <a href="{{url_for('cart')}}">CART</a>
+        </div>
+    </div>
+<div class="cart-price-combined">
+<div class="cart-items-outerdiv">
+    <div class="delivery-address">
+        <h3>Delivery Address</h3>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae sit veniam quod esse, dolore libero ea fugit in dolorem repellat illo molestias. Molestias amet autem praesentium tempora consequatur at libero.</p>
+        <button class="edit-adress">EDIT</button>
+    </div>
+    
+    {% for product in products %}
+    <div class="cart-items-innerdiv">
+        <div class="top-section">
+            <div class="image-quantity">
+                <img class="product-image" src="{{ url_for('static', filename=product[3] ) }}" alt="{{ product[1] }}" loading="lazy" decoding="async">
+                <div class="quantity" data-product-id="{{product[0]}}">
+                    <button id="qty-btn" type="button" class="minus">-</button>
+                    <p id="qty-val" class="qty-value">{{ product[5] }}</p>
+                    <button id="qty-btn" class="plus" type="button">+</button>
+                </div>
+            </div>
+            <div class="name-price">
+                <p class="product-name">{{ product[1] }}</p>
+                <p class="product-price">₹ {{ product[2] }}</p>
+            </div>
+        </div>
+        <div class="bottom-section">
+            <div class="remove-div">
+                <i class="fa-solid fa-trash"></i>
+                <button class="remove">Remove</button>
+            </div>
+            <div class="buy-div">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <button class="buy">Buy This Now</button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="total-price">
+    
+    <div class="price-details">
+        <h3>Price Details:</h3>
+        <div class="actual-price-details">
+            <p class="mrp">MRP:</p>
+            <p class="actual-price">$ {{actual_total}}</p>
+        </div>
+        
+        <div class="discount-details">
+            <p class="discount">Discount:</p>
+            <p class="discount-value">$ {{discount}}</p>
+        </div>
+        <div class="total-price-details">
+            <p class="totaloprice">Total:</p>
+            <p class="totalo-price">$ {{total}}</p>
+        </div>
+    </div>
+    <div class="place-orderdiv">
+        <button type="button" class="placeordero">Place Order</button>
+    </div>
+</div>
+</div>
+
+<form id="address-form">
+    <label>Full Name</label>
+    <input type="text" name="fullname" required>
+
+    <label>Phone Number</label>
+    <input
+    type="tel"
+    id="phone"
+    name="phone"
+    pattern="[0-9]{10}"
+    maxlength="10"
+    required
+>
+
+    <label>House No / Street</label>
+    <input type="text" name="street" required>
+
+    <label>City</label>
+    <input type="text" name="city" required>
+
+    <label>State</label>
+    <input type="text" name="state" required>
+
+    <label>Pincode</label>
+    <input type="text" name="pincode" maxlength="7" required>
+
+    <label>Country</label>
+    <input type="text" name="country" value="India" required>
+
+    <button type="submit">Save Address</button>
+    <button type="button" class="close">CLOSE</button>
+</form>
+
+<div class="checkout">
+    <div class="inner-checkout-div">
+        <h3 class="checkout-header">Checkout Single Item</h3>
+        <div class="checkout_image-quantity">
+             <div class="checkout-img-wrap">
+                <img class="checkout_product-image" src="" alt="Product Image">
+                <div class="checkout_quantity" data-productoid="">
+                    <button id="checkout_qty_btn" type="button" class="checkout_minus">-</button>
+                    <p id="checkout_qty_val" class="checkout_qty-value"></p>
+                    <button id="checkout_qty_btn" class="checkout_plus" type="button">+</button>
+                </div>
+             </div>
+            
+            <div class="checkout_name-price">
+                <p class="checkout_product-name"></p>
+                <p class="checkout_product-price"></p>
+            </div>
+        </div>
+        <div class="checkout-actions">
+            <button class="checkout-place-btn" type="button">Confirm Order</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const minus=document.querySelectorAll('.minus');
+    const plus=document.querySelectorAll('.plus');
+
+    const remove=document.querySelectorAll('.remove');
+
+    remove.forEach(button =>{
+        button.addEventListener("click",function(){
+            const cartItem = this.closest('.cart-items-innerdiv');
+            cartItem.style.display="none";
+            const parent=cartItem.querySelector('.quantity');
+            const product_id=parent.dataset.productId;
+            fetch('/delete_product_details',{
+                method:'POST',
+                headers:{
+                    'content-type':'application/json'
+                },
+                body:JSON.stringify({productid:product_id})
+            })
+            .then(response => response.json())
+            .then(data =>{
+                document.querySelector('.actual-price').textContent='$' + data.updated_total;
+                document.querySelector('.discount-value').textContent='$' + data.updated_discount;
+                document.querySelector('.totalo-price').textContent='$' + data.updated_after_discount;
+            });
+        });
+        
+    });
+ 
+
+    minus.forEach(button => {
+        button.addEventListener("click",function(){
+ 
+            const parent = this.parentElement;
+            const product_id = parent.dataset.productId;
+            const quan = parent.querySelector('.qty-value');
+            
+            let qty=parseInt(quan.textContent);
+            if (qty>1){
+                qty=qty-1;
+                quan.textContent=qty;
+            } 
+
+            fetch('/update_quantity',{
+                method:'POST',
+                headers:{
+                    'content-type':'application/json'
+                },
+                body:JSON.stringify({updated_quantity:qty,productid:product_id})
+            }
+
+            )
+            .then(response => response.json())
+            .then(data =>{
+                document.querySelector('.actual-price').textContent='$' + data.updated_total;
+                document.querySelector('.discount-value').textContent='$' + data.updated_discount;
+                document.querySelector('.totalo-price').textContent='$' + data.updated_after_discount;
+            });
+        });        
+    });
+
+    plus.forEach(button =>{
+        button.addEventListener("click",function(){
+
+            const parent = this.parentElement;
+            const product_id = parent.dataset.productId;
+            const quan = parent.querySelector('.qty-value');
+            let qty=parseInt(quan.textContent);
+            
+            qty=qty + 1;
+            quan.textContent=qty;
+            fetch('/update_quantity',{
+                method:'POST',
+                headers:{
+                    'content-type':'application/json'
+                },
+                body:JSON.stringify({updated_quantity:qty,productid:product_id})
+            })
+            .then(response => response.json())
+            .then(data =>{
+                document.querySelector('.actual-price').textContent= '$' + data.updated_total;
+                document.querySelector('.discount-value').textContent='$' +data.updated_discount;
+                document.querySelector('.totalo-price').textContent='$' + data.updated_after_discount;
+            });
+        });  
+        });
+    
+
+
+    const address_form=document.querySelector('.edit-adress');
+    address_form.addEventListener("click",function(){
+        document.getElementById("address-form").style.display="block";
+    });
+document.getElementById("address-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const data = {
+        
+        fullname: document.querySelector('[name="fullname"]').value,
+        phone: document.querySelector('[name="phone"]').value,
+        street: document.querySelector('[name="street"]').value,
+        city: document.querySelector('[name="city"]').value,
+        state: document.querySelector('[name="state"]').value,
+        pincode: document.querySelector('[name="pincode"]').value,
+        country: document.querySelector('[name="country"]').value
+    };
+
+    fetch("/save_address", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data){
+        if(data.success){
+            document.getElementById('address-form').style.display="none";
+            alert("Your Address has Been saved successfully");
+        }
+    })
+   
+   
+});
+
+const addresso_form=document.getElementById('address-form');
+const close_button=document.querySelector('.close');
+close_button.addEventListener("click", function(){
+    addresso_form.style.display="none";
+});
+
+const buy_button=document.querySelectorAll('.buy');
+
+buy_button.forEach(button =>{
+    button.addEventListener("click",function(){
+        const checkout=document.querySelector('.checkout');
+        const cartitem=this.closest('.cart-items-innerdiv');
+        const cartitem_outerdiv=this.closest('.cart-items-outerdiv');
+        const image_url=cartitem.querySelector('.product-image').src;
+        const product_name=cartitem.querySelector('.product-name').textContent;
+
+        const product_price=cartitem.querySelector('.product-price').textContent;
+        const product_qunatity=cartitem.querySelector('.qty-value').textContent;
+
+        const inner_checkout_div=document.querySelector('.inner-checkout-div');
+        const checkout_image_url=inner_checkout_div.querySelector('.checkout_product-image');
+        const checkout_product_name=inner_checkout_div.querySelector('.checkout_product-name');
+        const checkout_product_price=inner_checkout_div.querySelector('.checkout_product-price');
+        const checkout_product_quantity=inner_checkout_div.querySelector('.checkout_qty-value');
+
+        const product_id=cartitem.querySelector('.quantity');
+        const checkout_quantity=inner_checkout_div.querySelector('.checkout_quantity');
+        const total_price=document.querySelector('.total-price');
+        total_price.style.display="none";
+
+        checkout_quantity.dataset.productoid=product_id.dataset.productId;
+
+
+        cartitem_outerdiv.style.display="none";
+        checkout.style.display="block"; // Changed from flex to block to maintain styling flow
+
+        checkout_image_url.src=image_url;
+        checkout_product_name.textContent=product_name;
+        checkout_product_price.textContent=product_price;
+        checkout_product_quantity.textContent=product_qunatity;
+
+});
+}
+);
+
+const checkout_minus=document.querySelector('.checkout_minus');
+const checkout_plus=document.querySelector('.checkout_plus');
+
+
+checkout_minus.addEventListener("click",function(){
+        const innercheckoutdiv=this.closest('.inner-checkout-div');
+        const checkout_quantity=innercheckoutdiv.querySelector('.checkout_qty-value');
+        const productidd=innercheckoutdiv.querySelector('.checkout_quantity').dataset.productoid;
+
+        let qty=parseInt(checkout_quantity.textContent);
+            if (qty>1){
+                qty=qty-1;
+                checkout_quantity.textContent=qty;
+            }
+        fetch('/update_quantity',{
+            method:"POST",
+            headers: { "Content-Type": "application/json"},
+            body:JSON.stringify({updated_quantity:qty,productid:productidd})
+        });         
+
+    });
+
+
+checkout_plus.addEventListener("click",function(){
+        const innercheckoutdiv=this.closest('.inner-checkout-div');
+        const checkout_quantity=innercheckoutdiv.querySelector('.checkout_qty-value');
+        const productidd=innercheckoutdiv.querySelector('.checkout_quantity').dataset.productoid;
+
+        let qty=parseInt(checkout_quantity.textContent);
+        qty=qty + 1;
+        checkout_quantity.textContent=qty;
+        fetch('/update_quantity',{
+            method:"POST",
+            headers: { "Content-Type": "application/json"},
+            body:JSON.stringify({updated_quantity:qty,productid:productidd})
+        });         
+
+    });
+
+    
+
+
+</script>
+</body>
+</html>

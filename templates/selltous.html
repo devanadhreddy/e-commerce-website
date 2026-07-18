@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sell to Us | ShopKart Premium Partner Program</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Premium Design Architecture --- */
+        :root {
+            --bg-dark: #070b14;
+            --bg-card: rgba(255, 255, 255, 0.02);
+            --border-color: rgba(255, 255, 255, 0.07);
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --accent-gold: #cda250;
+            --accent-gold-hover: #e5ba69;
+            --font-sans: 'Inter', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            text-align: center;
+            padding: 7rem 0 4rem 0;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(205, 162, 80, 0.05) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .hero h1 {
+            font-family: var(--font-serif);
+            font-size: 3.5rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            margin-bottom: 1.5rem;
+            
+            /* High-End Metallic Text Gradient Definition */
+            background: linear-gradient(135deg, #ffffff 40%, #a1a1aa 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            max-width: 650px;
+            margin: 0 auto;
+            font-weight: 300;
+        }
+
+        /* --- Process Cards Section --- */
+        .section-title {
+            text-align: center;
+            font-family: var(--font-serif);
+            font-size: 2.2rem;
+            margin: 4rem 0 3rem 0;
+            font-weight: 500;
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 5rem;
+        }
+
+        .process-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .process-card:hover {
+            border-color: rgba(205, 162, 80, 0.25);
+            background: rgba(255, 255, 255, 0.04);
+            transform: translateY(-4px);
+        }
+
+        .step-number {
+            font-family: var(--font-serif);
+            font-size: 3rem;
+            font-style: italic;
+            color: rgba(205, 162, 80, 0.15);
+            position: absolute;
+            top: 1.5rem;
+            right: 2rem;
+        }
+
+        .process-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .process-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* --- Split Layout: Guidelines & Interactive Form --- */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 4rem;
+            margin-bottom: 6rem;
+            align-items: start;
+        }
+
+        .info-panel h2 {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-gold);
+            font-weight: 500;
+        }
+
+        .info-panel p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+
+        .criteria-list {
+            list-style: none;
+        }
+
+        .criteria-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .criteria-icon {
+            color: var(--accent-gold);
+            margin-right: 1rem;
+            font-size: 1.1rem;
+            margin-top: 0.1rem;
+        }
+
+        .criteria-text h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .criteria-text p {
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+
+        /* --- Premium Input Form UI --- */
+        .form-container {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 3.5rem;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        }
+
+        .form-group {
+            margin-bottom: 1.75rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.6rem;
+            color: #e2e8f0;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.9rem 1.2rem;
+            color: #ffffff;
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 0 1px var(--accent-gold);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-select option {
+            background: #0f1422;
+            color: #ffffff;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: var(--accent-gold);
+            color: #070b14;
+            border: none;
+            border-radius: 8px;
+            padding: 1.1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            background: var(--accent-gold-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 10px 20px rgba(205, 162, 80, 0.15);
+        }
+
+        /* --- Bottom Footer Confidentiality Note --- */
+        .footer-note {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 5rem;
+        }
+
+        /* --- Clean Responsive Adaptation --- */
+        @media (max-width: 992px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            .process-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 1.75rem;
+            }
+            .form-container {
+                padding: 2rem 1.5rem;
+            }
+            .hero {
+                padding: 5rem 0 3rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <main class="container">
+        
+        <section class="hero">
+            <h1>Partner with ShopKart</h1>
+            <p>Turn your premium inventory into liquidity. We acquire high-quality curated goods, luxury overstock, and pristine collections from verified suppliers and brands globally.</p>
+        </section>
+
+        <h2 class="section-title">The Evaluation Journey</h2>
+        <section class="process-grid">
+            <div class="process-card">
+                <span class="step-number">01</span>
+                <h3>Submit Manifest</h3>
+                <p>Provide details regarding your inventory items, conditions, documentation, and expected baseline valuations via our secure portal.</p>
+            </div>
+            <div class="process-card">
+                <span class="step-number">02</span>
+                <h3>Expert Appraisal</h3>
+                <p>Our dedicated acquisitions team reviews your catalog against current market demand and luxury authenticity protocols within 48 hours.</p>
+            </div>
+            <div class="process-card">
+                <span class="step-number">03</span>
+                <h3>Direct Settlement</h3>
+                <p>Upon physical verification, receive rapid, secure wire payments or high-value store allocations at top-tier industry valuations.</p>
+            </div>
+        </section>
+
+        <div class="main-layout">
+            
+            <section class="info-panel">
+                <h2>Acquisition Criteria</h2>
+                <p>To preserve ShopKart’s high retail standard, all inventory submissions must comply with our strict verification guidelines before formal onboarding.</p>
+                
+                <ul class="criteria-list">
+                    <li class="criteria-item">
+                        <span class="criteria-icon">✦</span>
+                        <div class="criteria-text">
+                            <h4>Pristine & Verified Authentic</h4>
+                            <p>Items must be 100% genuine with proper documentation, original packaging, or structural brand tags attached.</p>
+                        </div>
+                    </li>
+                    <li class="criteria-item">
+                        <span class="criteria-icon">✦</span>
+                        <div class="criteria-text">
+                            <h4>Premium Categories Only</h4>
+                            <p>We actively accept high-end consumer electronics, designer apparel, luxury timepieces, and limited-edition lifestyle items.</p>
+                        </div>
+                    </li>
+                    <li class="criteria-item">
+                        <span class="criteria-icon">✦</span>
+                        <div class="criteria-text">
+                            <h4>Scalable Partnerships</h4>
+                            <p>While we welcome single high-value luxury assets, we prioritize vendors capable of consistent batch or overstock supply.</p>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="form-container">
+                <form action="#" method="POST" onsubmit="event.preventDefault();">
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-input" placeholder="Alexander Wright" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Corporate Email</label>
+                            <input type="email" class="form-input" placeholder="alex@company.com" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Company Name (Optional)</label>
+                            <input type="text" class="form-input" placeholder="Enterprise Group LLC">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Primary Category</label>
+                            <select class="form-select" required>
+                                <option value="" disabled selected>Select inventory style</option>
+                                <option value="electronics">Premium Electronics</option>
+                                <option value="apparel">Luxury Fashion & Apparel</option>
+                                <option value="watches">Timepieces & Fine Jewelry</option>
+                                <option value="other">Limited Lifestyle / Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Estimated Lot Valuation</label>
+                        <select class="form-select" required>
+                            <option value="" disabled selected>Select estimated batch value</option>
+                            <option value="tier1">$1,000 - $5,000</option>
+                            <option value="tier2">$5,000 - $25,000</option>
+                            <option value="tier3">$25,000 - $100,000</option>
+                            <option value="tier4">$100,000+</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Inventory Manifest & Description</label>
+                        <textarea class="form-textarea" placeholder="Please outline model numbers, physical condition, quantities, and proof of origin details..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Submit Proposal for Review</button>
+                </form>
+            </section>
+        </div>
+
+        <div class="footer-note">
+            Confidentiality Guaranteed. All inventory manifests are evaluated under strict non-disclosure terms. For direct corporate liquidation inquiries, email <a href="mailto:acquisitions@shopkart.com" style="color: var(--accent-gold); text-decoration: none;">acquisitions@shopkart.com</a>.
+        </div>
+
+    </main>
+
+</body>
+</html>

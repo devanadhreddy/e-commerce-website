@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopKart</title>
+    <!-- <link rel="stylesheet" href="/static/css/index.css">  -->
+     <style>
+        /* ==========================================
+   1. CORE INTERFACE SETUP & RESET
+   ========================================== */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg-main: #f8fafc;        /* Elegant modern light grey-white canvas */
+    --bg-surface: #ffffff;     /* Solid pure white for product cards */
+    --text-main: #0f172a;      /* Deep sharp slate for bold pricing and names */
+    --text-muted: #64748b;     /* Slate grey for regular navigation links */
+    --accent-blue: #2563eb;    /* Premium storefront brand identifier blue */
+    --accent-glow: rgba(37, 99, 235, 0.06);
+    --border-light: #e2e8f0;   /* Muted grey boundaries */
+    --font-global: 'Plus Jakarta Sans', sans-serif;
+    --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.02), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+    --shadow-hover: 0 20px 25px -5px rgba(15, 23, 42, 0.06), 0 10px 10px -5px rgba(15, 23, 42, 0.02);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    font-family: var(--font-global);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================
+   2. CUSTOM STICKY GLOBAL NAVIGATION BAR
+   ========================================== */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--bg-surface);
+    padding: 0.95rem 4%;
+    border-bottom: 1px solid var(--border-light);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-icons {
+    display: flex;
+    align-items: center;
+    gap: 2.2rem;
+}
+
+.nav-icons a, .end-nav-icon a {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    transition: color 0.2s ease;
+}
+
+.nav-icons a:hover, .end-nav-icon a:hover {
+    color: var(--text-main);
+}
+
+/* Premium Floating Cart Pill Indicator */
+.nav-icons a.cart {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background-color: #f1f5f9;
+    padding: 0.45rem 0.9rem;
+    border-radius: 20px;
+    color: var(--text-main);
+}
+
+#cart-count {
+    background-color: var(--accent-blue);
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.1rem 0.45rem;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+}
+
+.end-nav-icon a {
+    border: 1px solid var(--border-light);
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+    background-color: #f8fafc;
+}
+
+/* ==========================================
+   3. CLEAN MINIMALIST SEARCH CONTAINER
+   ========================================== */
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 0 1.2rem;
+    width: 440px;
+    height: 44px;
+    margin: 2rem auto;
+    transition: all 0.3s ease;
+}
+
+.search-bar:focus-within {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 4px var(--accent-glow);
+}
+
+.search-bar i {
+    color: var(--text-muted);
+    margin-right: 0.75rem;
+    font-size: 0.9rem;
+}
+
+.search-bar input {
+    border: none;
+    background: transparent;
+    width: 100%;
+    height: 100%;
+    outline: none;
+    font-family: var(--font-global);
+    font-size: 0.9rem;
+    color: var(--text-main);
+}
+
+/* ==========================================
+   4. RESPONSIBLE PRODUCT CARD MASONRY GRID
+   ========================================== */
+.product-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    padding: 0 4% 4rem 4%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Premium Individual Product Card Container */
+.product-info {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-card);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.product-info:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: #cbd5e1;
+}
+
+/* Structured Square Product Image Container Frames */
+.product-info img {
+    width: 100%;
+    aspect-ratio: 1.1 / 1;
+    object-fit: cover;
+    border-radius: 10px;
+    background-color: #f8fafc;
+    margin-bottom: 1rem;
+}
+
+/* Meta Labels Details Layer */
+.name-price-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0 0.25rem 1rem 0.25rem;
+    gap: 1rem;
+}
+
+.name-price-info p:first-child {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-main);
+    line-height: 1.4;
+    text-transform: capitalize;
+}
+
+.name-price-info p:last-child {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+/* ==========================================
+   5. RETAIL RENDERED ACTION BUTTONS
+   ========================================== */
+.cart-add-info {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: auto; /* Always pins interaction blocks neatly to the card base */
+}
+
+.cart-add-info button {
+    flex: 1;
+    height: 42px;
+    font-family: var(--font-global);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Add To Cart Secondary Aesthetic Button */
+.cart-add-info button.add-to-cart-button {
+    background-color: #f1f5f9;
+    color: var(--text-main);
+    border: 1px solid #e2e8f0;
+}
+
+.cart-add-info button.add-to-cart-button:hover {
+    background-color: #e2e8f0;
+    border-color: #cbd5e1;
+}
+
+/* Buy Now Accent Action Button */
+.cart-add-info button:not(.add-to-cart-button) {
+    background-color: var(--text-main);
+    color: #ffffff;
+    border: none;
+}
+
+.cart-add-info button:not(.add-to-cart-button):hover {
+    background-color: var(--accent-blue);
+    box-shadow: 0 8px 16px -6px rgba(37, 99, 235, 0.4);
+}
+
+/* ==========================================
+   6. RESPONSIVE LAYOUT MATRIX
+   ========================================== */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem 4%;
+    }
+    .search-bar {
+        width: 100%;
+        margin: 1rem auto;
+    }
+    .product-items {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 1.25rem;
+    }
+}
+/* ==========================================
+   7. PRODUCT PURCHASE VIEW (CHECKOUT SCREEN)
+   ========================================== */
+.product_purchase_div {
+    display: none; /* Hidden by default, switch to 'flex' via JS */
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 0 4% 4rem 4%;
+    animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Delivery Details Panel */
+.delivery_edit_details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-card);
+}
+.change_location{
+    border: none;
+    padding: 1.5rem;
+    cursor: pointer;
+    color: white;
+    background-color:#2563eb;
+    border-radius: 10px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.change_location:hover{
+    background-color: #054de8;
+    box-shadow: 0px 8px 16px rgba(15, 23, 42, 0.02);
+}
+
+/* Two-Column Order Split Layout */
+.product_order_div {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+/* Column A: Left Side Product Summary Panel */
+.product_details {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+}
+
+.product_image_purchase {
+    width: 100%;
+    max-width: 280px;
+    aspect-ratio: 1.1 / 1;
+    object-fit: cover;
+    border-radius: 12px;
+    background-color: #f8fafc;
+}
+
+.product_name_purchase {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-main);
+    text-transform: capitalize;
+}
+
+.prodcut_price_purchase {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+}
+
+/* Column B: Right Side Bill / Pricing Card */
+.place_order_div {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.price-details h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-main);
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-light);
+    margin-bottom: 1rem;
+}
+
+/* Row alignments for invoice items */
+.actual-price-details, 
+.discount-details, 
+.total-price-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.85rem;
+    font-size: 0.95rem;
+}
+
+.mrp, .discount {
+    color: var(--text-muted);
+}
+
+.actual-price {
+    color: var(--text-main);
+    font-weight: 500;
+}
+
+.discount-value {
+    color: #10b981; /* Premium Emerald Green for discounts */
+    font-weight: 600;
+}
+
+/* Prominent Total Highlight Row */
+.total-price-details {
+    border-top: 1px solid var(--border-light);
+    padding-top: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 0;
+}
+
+.totaloprice {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.totalo-price {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+/* Big Premium Action Button */
+.place-orderdiv button.placeordero {
+    width: 100%;
+    height: 48px;
+    background-color: var(--accent-blue);
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-family: var(--font-global);
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 8px 16px -6px rgba(37, 99, 235, 0.3);
+}
+
+.place-orderdiv button.placeordero:hover {
+    background-color: #1d4ed8; /* Darker blue focus hover */
+    transform: translateY(-1px);
+    box-shadow: 0 12px 20px -6px rgba(37, 99, 235, 0.4);
+}
+
+/* Smooth Entrance Transition Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==========================================
+   8. RESPONSIVE CHECKOUT MATRIX
+   ========================================== */
+@media (max-width: 768px) {
+    .product_order_div {
+        grid-template-columns: 1fr; /* Stack panels vertically on mobile layouts */
+        gap: 1.5rem;
+    }
+}
+/* ==========================================
+   9. ADDRESS MODIFICATION & SELECTION LAYER (PURE CSS FIX)
+   ========================================== */
+.address_modification {
+    display: none; /* Switch to flex via JS */
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 800px;
+    margin: 2.5rem auto;
+    padding: 0 4% 4rem 4%;
+    animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Premium Dashed Button Trigger */
+.add_new_address {
+    width: 100%;
+    height: 54px;
+    background-color: var(--bg-surface);
+    color: var(--accent-blue);
+    border: 2px dashed #cbd5e1;
+    border-radius: 14px;
+    font-family: var(--font-global);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.add_new_address:hover {
+    border-color: var(--accent-blue);
+    background-color: var(--accent-glow);
+    transform: translateY(-1px);
+}
+
+/* Wrapper turning the simple text into a clean card */
+.address_list {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: 16px 16px 0 0; /* Smooth top corners */
+    padding: 1.75rem;
+    box-shadow: var(--shadow-card);
+    border-bottom: none; /* Blends natively into the button block below */
+}
+
+/* Premium Typography for raw address content */
+.address_para {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-main);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+
+/* Action block attached seamlessly under the address box */
+.save_remove_address {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-top: 1px dashed var(--border-light); /* Decorative separation line */
+    border-radius: 0 0 16px 16px; /* Smooth bottom corners */
+    padding: 1.25rem 1.75rem;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    justify-content: flex-end; /* Aligns actions beautifully to the right side */
+    align-items: center;
+    gap: 0.85rem;
+}
+
+/* Base button standards across operations */
+.save_remove_address button {
+    height: 42px;
+    font-family: var(--font-global);
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0 1.5rem;
+    border-radius: 10px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+/* Primary Select Accent Option */
+.save_address {
+    background-color: var(--text-main);
+    color: #ffffff;
+    border: none;
+}
+
+.save_address:hover {
+    background-color: var(--accent-blue);
+    box-shadow: 0 6px 16px -4px rgba(37, 99, 235, 0.3);
+}
+
+/* Crimson Minimalist Destructive Option */
+.remove_address {
+    background-color: #fef2f2;
+    color: #ef4444;
+    border: 1px solid #fee2e2;
+}
+
+.remove_address:hover {
+    background-color: #fee2e2;
+    border-color: #fca5a5;
+}
+
+/* Quick Response handling for handheld phone displays */
+@media (max-width: 520px) {
+    .save_remove_address {
+        flex-direction: column-reverse; /* Stacks button inputs cleanly */
+        align-items: stretch;
+    }
+    .save_remove_address button {
+        width: 100%;
+    }
+}
+
+/* ==========================================
+   10. PREMIUM SIMPLISTIC PAYMENT SCREEN LAYER
+   ========================================== */
+.payment_view_container {
+    display: none; /* Switch to 'flex' via JS when navigating from checkout */
+    flex-direction: column;
+    max-width: 850px;
+    margin: 2.5rem auto;
+    padding: 0 4% 4rem 4%;
+    animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Back Link Navigator */
+.payment_back_btn {
+    align-self: flex-start;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-family: var(--font-global);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    transition: color 0.2s ease;
+}
+
+.payment_back_btn:hover {
+    color: var(--text-main);
+}
+
+/* Split Column Interface Matrix */
+.payment_layout_grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+/* Left Panel: Payment Method Aggregator Box */
+.payment_methods_box {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.payment_methods_box h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+}
+
+/* Individual Method Option Row Wrap */
+.method_option_label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem 1.25rem;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    cursor: pointer;
+    background-color: var(--bg-surface);
+    transition: all 0.25s ease;
+}
+
+/* Dynamic Hidden Native Check Radio Elements styling custom target */
+.method_option_label input[type="radio"] {
+    accent-color: var(--accent-blue);
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.method_meta_left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.method_meta_left i {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    width: 24px;
+    text-align: center;
+}
+
+.method_name_text {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+/* Premium Highlight State Triggered via CSS/JS focus states */
+.method_option_label:has(input[type="radio"]:checked) {
+    border-color: var(--accent-blue);
+    background-color: var(--accent-glow);
+}
+
+.method_option_label:has(input[type="radio"]:checked) i {
+    color: var(--accent-blue);
+}
+
+/* Right Panel: Minimal Checkout Breakdown Invoice Box */
+.payment_summary_box {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.payment_summary_box h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-main);
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.summary_invoice_row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+}
+
+.summary_invoice_row .label_muted {
+    color: var(--text-muted);
+}
+
+.summary_invoice_row .val_bold {
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.summary_total_row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border-light);
+    padding-top: 1.25rem;
+    margin-top: 0.5rem;
+}
+
+.summary_total_row span:first-child {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.summary_total_row span:last-child {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+/* Master Premium Finalize Action Button */
+.pay_now_secure_btn {
+    width: 100%;
+    height: 50px;
+    background-color: var(--text-main);
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-family: var(--font-global);
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    transition: all 0.25s ease;
+}
+
+.pay_now_secure_btn:hover {
+    background-color: var(--accent-blue);
+    box-shadow: 0 10px 20px -6px rgba(37, 99, 235, 0.4);
+    transform: translateY(-1px);
+}
+
+/* Responsive Media Breakdown Matrix */
+@media (max-width: 768px) {
+    .payment_layout_grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+/* ==========================================
+   11. PREMIUM ORDER CONFIRMATION SCREEN
+   ========================================== */
+.confirmation_view_container {
+    display: none; /* Switch to 'flex' on successful placement */
+    align-items: center;
+    justify-content: center;
+    min-height: 75vh;
+    padding: 2rem 4%;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Full screen Confetti Canvas Layer overlay configuration */
+#confetti-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Allows user input actions behind it */
+    z-index: 10;
+}
+
+/* Clean Professional Success Card Card */
+.confirmation_card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: 24px;
+    padding: 3rem 2.5rem;
+    max-width: 520px;
+    width: 100%;
+    text-align: center;
+    box-shadow: var(--shadow-hover);
+    position: relative;
+    z-index: 20;
+    animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Modern Minimalist Success Icon Ring Indicator */
+.success_icon_ring {
+    width: 72px;
+    height: 72px;
+    background-color: #f0fdf4; /* Light elegant green glow canvas */
+    border: 2px solid #bbf7d0;
+    color: #16a34a; /* Vibrant premium emerald accent indicator */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    margin: 0 auto 1.5rem auto;
+    animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.confirmation_header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+}
+
+.confirmation_header p {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+/* Metadata Mini Invoice Block Container */
+.order_meta_receipt {
+    background-color: #f8fafc;
+    border: 1px solid var(--border-light);
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.receipt_row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.receipt_label {
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.receipt_value {
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+/* Clean Solid Primary CTA View Anchor */
+.btn_continue_shopping {
+    width: 100%;
+    height: 48px;
+    background-color: var(--text-main);
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-family: var(--font-global);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.25s ease;
+}
+
+.btn_continue_shopping:hover {
+    background-color: var(--accent-blue);
+    box-shadow: 0 8px 20px -6px rgba(37, 99, 235, 0.4);
+    transform: translateY(-1px);
+}
+
+/* Unique Keyframe Entry Scale Animation for the Top Badge Ring */
+@keyframes scaleIn {
+    0% { transform: scale(0); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+     </style>
+     
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <!-- logo -->
+        </div>
+        <div class="nav-icons">
+            <a href="{{url_for('logino')}}">LOGIN</a>
+            <a href="{{url_for('home')}}">HOME</a>
+            <a href="{{url_for('about_us')}}">ABOUT US</a>
+            <a href="{{url_for('cart')}}" class="cart">CART
+                <span id="cart-count">0</span>
+            </a>
+
+        </div>
+        <div class="end-nav-icon">
+            <a href="#">MORE</a>
+        </div>
+    </div>
+
+    <div class="search-bar">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="Search Your Products.......">
+
+    </div>
+
+    <div class="product-items">
+        {% for product in products %}
+        <div class="product-info">
+            
+            <img src="{{url_for('static', filename= product[3]) }}" loading="lazy" decoding="async" alt="products-name">
+
+            <div class="name-price-info">
+                <p>{{product[1]}}</p>
+                <p>${{product[2]}}</p>
+            </div>
+
+            <div class="cart-add-info">
+                <button class="add-to-cart-button" data-product-id="{{product[0]}}">ADD TO CART</button>
+
+                <button class="buynow" data-product-id="{{product[0]}}">BUY NOW</button>
+            </div>
+
+            
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="product_purchase_div">
+        <div class="delivery_edit_details">
+            <p class="address_details"></p>
+            <button class="change_location" type="button">Change</button>
+        </div>
+        <div class="product_order_div">
+            <div class="product_details">
+                <img src="" class="product_image_purchase">
+                <p class="product_name_purchase"></p>
+                <p class="product_price_purchase"></p>
+            </div>
+            <div class="place_order_div">
+                
+                <div class="price-details">
+                    
+                    <h3>Price Details:</h3>
+                    <div class="actual-price-details">
+                        <p class="mrp">MRP:</p>
+                        <p class="actual-price">tyjvghg</p>
+                    </div>
+        
+                <div class="discount-details">
+                    <p class="discount">Discount:</p>
+                    <p class="discount-value">ghghy</p>
+                </div>
+                <div class="total-price-details">
+                    <p class="totaloprice">Total:</p>
+                    <p class="totalo-price">ghjg</p>
+                </div>
+    </div>
+    <div class="place-orderdiv">
+        <button type="button" class="placeordero">Place Order</button>
+    </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="address_modification">
+        <button type="button" class="add_new_address"> Click To Add New Address</button>
+        <div class="address_list">
+            <p class="address_para"></p>
+        </div> 
+        <div class="save_remove_address">
+            <button type="button" class="remove_address">
+                <i class="fa-solid fa-xmark"></i> Remove
+            </button>
+            <button type="button" class="save_address">
+                <i class="fa-solid fa-floppy-disk"></i> Use This Address
+            </button>
+        </div>     
+    </div>
+    <!-- ==========================================
+       PAYMENT PROCESS COMPONENT VIEW
+       ========================================== -->
+    <div class="payment_view_container">
+        <button type="button" class="payment_back_btn" id="back-to-checkout">
+            <i class="fa-solid fa-arrow-left"></i> Return to Order Summary
+        </button>
+
+        <div class="payment_layout_grid">
+            <!-- Left Side: Interactive Choice Fields -->
+            <div class="payment_methods_box">
+                <div>
+                    <h2>Select Payment Option</h2>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;">All transactions are secure and encrypted.</p>
+                </div>
+
+                <!-- Credit/Debit Cards -->
+                <label class="method_option_label">
+                    <div class="method_meta_left">
+                        <i class="fa-solid fa-credit-card"></i>
+                        <span class="method_name_text">Credit / Debit Card</span>
+                    </div>
+                    <input type="radio" name="payment_choice" value="card" checked>
+                </label>
+
+                <!-- UPI Options -->
+                <label class="method_option_label">
+                    <div class="method_meta_left">
+                        <i class="fa-solid fa-mobile-screen-button"></i>
+                        <span class="method_name_text">UPI / Net Banking</span>
+                    </div>
+                    <input type="radio" name="payment_choice" value="upi">
+                </label>
+
+                <!-- Cash On Delivery -->
+                <label class="method_option_label">
+                    <div class="method_meta_left">
+                        <i class="fa-solid fa-money-bill-wave"></i>
+                        <span class="method_name_text">Cash on Delivery (COD)</span>
+                    </div>
+                    <input type="radio" name="payment_choice" value="cod">
+                </label>
+            </div>
+
+            <!-- Right Side: Clean Checkout Slip -->
+            <div class="payment_summary_box">
+                <h3>Payment Summary</h3>
+                
+                <div class="summary_invoice_row">
+                    <span class="label_muted">Order Items Summary</span>
+                    <span class="val_bold id-payment-mrp">$0.00</span>
+                </div>
+                <div class="summary_invoice_row">
+                    <span class="label_muted">Guaranteed Discount</span>
+                    <span class="val_bold id-payment-discount" style="color: #10b981;">-$0.00</span>
+                </div>
+                <div class="summary_invoice_row">
+                    <span class="label_muted">Shipping Insurance</span>
+                    <span class="val_bold" style="color: #10b981;">FREE</span>
+                </div>
+
+                <div class="summary_total_row">
+                    <span>Total Amount:</span>
+                    <span class="id-payment-total">$0.00</span>
+                </div>
+
+                <button type="button" class="pay_now_secure_btn">
+                    <i class="fa-solid fa-shield-halved"></i> Complete Order Securely
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+       ORDER CONFIRMATION VIEW (SUCCESS SCREEN)
+       ========================================== -->
+    <div class="confirmation_view_container">
+        <!-- Canvas Layer for falling colored papers explosion -->
+        <canvas id="confetti-canvas"></canvas>
+
+        <div class="confirmation_card">
+            <!-- Animated Success Ring Badge -->
+            <div class="success_icon_ring">
+                <i class="fa-solid fa-check"></i>
+            </div>
+
+            <div class="confirmation_header">
+                <h2>Order Placed Successfully!</h2>
+                <p>Thank you for shopping with ShopKart. Your package is being prepared.</p>
+            </div>
+
+            <!-- Transaction Metadata Panel -->
+            <div class="order_meta_receipt">
+                <div class="receipt_row">
+                    <span class="receipt_label">Order ID:</span>
+                    <span class="receipt_value">#SK-2026-89412</span>
+                </div>
+                <div class="receipt_row">
+                    <span class="receipt_label">Estimated Delivery:</span>
+                    <span class="receipt_value" style="color: #10b981;">3 - 5 Business Days</span>
+                </div>
+                <div class="receipt_row">
+                    <span class="receipt_label">Payment Mode:</span>
+                    <span class="receipt_value">Secure Transaction</span>
+                </div>
+            </div>
+
+            <!-- Action Navigation Buttons -->
+            <div class="confirmation_actions">
+                <button type="button" class="btn_continue_shopping">
+                    Continue Shopping <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const addtocart_button=document.querySelectorAll('.add-to-cart-button');
+
+        addtocart_button.forEach(button => {
+            button.addEventListener("click",function(){
+                const productId=this.dataset.productId;
+                
+                fetch('/add_to_cart',{
+                    method:'POST',
+                    headers:{
+                        'content-Type':'application/json'
+                    },
+                    body:JSON.stringify({product_id:productId})
+                }
+
+                )
+                .then(response => response.json())
+                .then(data =>{
+                    document.getElementById('cart-count').innerText=data.quantity;
+                }
+
+                );
+            }
+            );
+        });
+
+        const buynow=document.querySelectorAll('.buynow');
+
+        buynow.forEach(button =>{
+            button.addEventListener("click",function(){
+                const productid=this.dataset.productId;
+                fetch('/buynow',{
+                    method:'POST',
+                    headers:{
+                        'content-Type':'application/json'
+                    },
+                    body:JSON.stringify({product_id:productid})
+                })
+                .then(response=>response.json())
+                .then(data=>{  
+                    document.querySelector('.product-items').style.display="none";
+                    document.querySelector('.product_purchase_div').style.display="block";
+                    document.querySelector('.product_image_purchase').src=data.product_image ;
+                    document.querySelector('.product_name_purchase').textContent=data.product_name;
+                    document.querySelector('.product_price_purchase').textContent='$' + data.product_price;
+                   document.querySelector('.actual-price').textContent='$' +  data.updated_total;
+                   document.querySelector('.discount-value').textContent='-'+ '$' + data.updated_discount;
+                   document.querySelector('.totalo-price').textContent='$' + data.updated_after_discount;
+                   document.querySelector('.address_details').textContent=data.address[0];
+        
+                });
+
+            });
+        }
+
+        );
+
+        const change_button=document.querySelector('.change_location');
+        const address_list=document.querySelector('.address_list');
+        change_button.addEventListener("click",function(){
+            document.querySelector('.product-items').style.display="none";
+            document.querySelector('.product_purchase_div').style.display="none";
+            document.querySelector('.address_modification').style.display="block";
+            fetch('/address_details')
+            .then(response=> response.json())
+            .then(data =>{
+                const address_data=data.address[0];
+                document.querySelector('.address_para').textContent=address_data;
+            });
+        });
+        document.querySelector('.save_address').addEventListener("click",function(){
+            document.querySelector('.product-items').style.display="none";
+            document.querySelector('.address_modification').style.display="none";
+            document.querySelector('.product_purchase_div').style.display="block";
+        });
+        document.querySelector('.remove_address').addEventListener("click",function(){
+            document.querySelector('.address_list').style.display="none";
+            document.querySelector('.save_remove_address').style.display="none";
+         });
+
+// Wire up transitions into the new Payment UI Screen
+        const placeOrderBtn = document.querySelector('.placeordero');
+        const returnBtn = document.getElementById('back-to-checkout');
+
+        placeOrderBtn.addEventListener('click', function() {
+            // Transfer pricing values seamlessly from checkout view onto your payment slip screen
+            document.querySelector('.id-payment-mrp').textContent = document.querySelector('.actual-price').textContent;
+            document.querySelector('.id-payment-discount').textContent = document.querySelector('.discount-value').textContent;
+            document.querySelector('.id-payment-total').textContent = document.querySelector('.totalo-price').textContent;
+
+            // Simple viewport toggles
+            document.querySelector('.product_purchase_div').style.display = "none";
+            document.querySelector('.payment_view_container').style.display = "flex";
+        });
+
+        returnBtn.addEventListener('click', function() {
+            document.querySelector('.payment_view_container').style.display = "none";
+            document.querySelector('.product_purchase_div').style.display = "flex";
+        });
+
+        // ========================================================
+// SEQUENTIAL STEP-BY-STEP CHECKOUT NAVIGATION LOGIC
+// ========================================================
+document.addEventListener("DOMContentLoaded", function() {
+    // 1. Grab all interface button triggers
+    const buyNowButtons = document.querySelectorAll('.buynow');
+    const goToPaymentBtn = document.querySelector('.placeordero'); // "Place Order" button on summary screen
+    const completePaymentBtn = document.querySelector('.pay_now_secure_btn'); // Final button on payment screen
+    const continueShoppingBtn = document.querySelector('.btn_continue_shopping');
+
+    // 2. Helper function to reset all views to hidden
+    function hideAllViews() {
+        document.querySelector('.product-items').style.display = "none";
+        document.querySelector('.product_purchase_div').style.display = "none";
+        document.querySelector('.address_modification').style.display = "none";
+        
+        const paymentView = document.querySelector('.payment_view_container');
+        if (paymentView) paymentView.style.display = "none";
+        
+        const confirmationView = document.querySelector('.confirmation_view_container');
+        if (confirmationView) confirmationView.style.display = "none";
+    }
+
+    // STEP 1: Clicking "Buy Now" goes to the Order Summary (product_purchase_div)
+    // (This works with your existing dynamic product loading fetch request)
+    buyNowButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            // Your existing fetch code runs here...
+            // After data loads, display the summary container:
+            hideAllViews();
+            document.querySelector('.product_purchase_div').style.display = "block";
+        });
+    });
+
+    // STEP 2: Clicking "Place Order" on Summary Screen redirects to PAYMENT instead of Confirmation
+    if (goToPaymentBtn) {
+        goToPaymentBtn.addEventListener('click', function() {
+            // Transfer pricing data into the payment summary labels dynamically
+            const paymentMrp = document.querySelector('.id-payment-mrp');
+            const paymentDiscount = document.querySelector('.id-payment-discount');
+            const paymentTotal = document.querySelector('.id-payment-total');
+
+            if (paymentMrp) paymentMrp.textContent = document.querySelector('.actual-price').textContent;
+            if (paymentDiscount) paymentDiscount.textContent = document.querySelector('.discount-value').textContent;
+            if (paymentTotal) paymentTotal.textContent = document.querySelector('.totalo-price').textContent;
+
+            // Route to payment screen
+            hideAllViews();
+            const paymentView = document.querySelector('.payment_view_container');
+            if (paymentView) {
+                paymentView.style.display = "flex";
+            }
+        });
+    }
+
+    // STEP 3: Clicking the payment page button finalized route to Success Screen
+    if (completePaymentBtn) {
+        completePaymentBtn.addEventListener('click', function() {
+            hideAllViews();
+            const confirmationView = document.querySelector('.confirmation_view_container');
+            if (confirmationView) {
+                confirmationView.style.display = "flex";
+            }
+        });
+    }
+
+    // STEP 4: Optional "Continue Shopping" reset link back to front store catalog grid
+    if (continueShoppingBtn) {
+        continueShoppingBtn.addEventListener('click', function() {
+            hideAllViews();
+            document.querySelector('.product-items').style.display = "grid";
+            document.getElementById('cart-count').innerText = "0"; // Optional reset card status counter
+        });
+    }
+});
+
+    </script>
+</body>
+</html>

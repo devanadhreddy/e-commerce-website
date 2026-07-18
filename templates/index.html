@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopKart</title>
+    <!-- <link rel="stylesheet" href="/static/css/index.css">  -->
+    <style>
+        /* ==========================================
+   1. PREMIUM DESIGN SYSTEM & RESET
+   ========================================== */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --bg-main: #f8fafc;        /* Soft crisp white cream background */
+    --bg-surface: #ffffff;     /* Pure white for foreground elements */
+    --text-main: #0f172a;      /* Deep obsidian charcoal for readable titles */
+    --text-muted: #64748b;     /* Slate grey for subtext and descriptions */
+    --accent-blue: #2563eb;    /* High-end global retail signature blue */
+    --accent-glow: rgba(37, 99, 235, 0.05);
+    --border-light: #e2e8f0;   /* Extremely soft edge borders */
+    --font-global: 'Plus Jakarta Sans', sans-serif;
+    --shadow-premium: 0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+    --shadow-hover: 0 20px 25px -5px rgba(15, 23, 42, 0.08), 0 10px 10px -5px rgba(15, 23, 42, 0.04);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    font-family: var(--font-global);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+/* ==========================================
+   2. LUXURY NAVIGATION BAR (NAVBAR)
+   ========================================== */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--bg-surface);
+    padding: 0.85rem 4%;
+    border-bottom: 1px solid var(--border-light);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.navbar .logo img {
+    height: 38px;
+    width: 120px;
+    object-fit: cover;
+    display: block;
+}
+
+/* Luxury Soft Minimal Search Input */
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: #f1f5f9;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    padding: 0 1.2rem;
+    width: 35%;
+    height: 44px;
+    transition: all 0.3s ease;
+}
+
+.search-bar:focus-within {
+    background-color: var(--bg-surface);
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 4px var(--accent-glow);
+}
+
+.search-bar i {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-right: 0.75rem;
+}
+
+.search-bar input {
+    border: none;
+    background: transparent;
+    width: 100%;
+    height: 100%;
+    outline: none;
+    color: var(--text-main);
+    font-family: var(--font-global);
+    font-size: 0.9rem;
+    font-weight: 400;
+}
+
+.search-bar input::placeholder {
+    color: #94a3b8;
+}
+
+/* Clean Navigation Hyperlinks */
+.nav-icons, .end-nav-icon {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.nav-icons a, .end-nav-icon a {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    position: relative;
+    padding: 0.5rem 0;
+    transition: color 0.3s ease;
+}
+
+.nav-icons a:hover, .end-nav-icon a:hover {
+    color: var(--accent-blue);
+}
+
+/* Premium active tab indicator line */
+.nav-icons a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--accent-blue);
+    transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-icons a:hover::after {
+    width: 100%;
+}
+
+/* Highlighted Standalone Cart button */
+.end-nav-icon a {
+    background-color: var(--text-main);
+    color: var(--bg-surface);
+    padding: 0.6rem 1.4rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.end-nav-icon a:hover {
+    background-color: var(--accent-blue);
+    color: var(--bg-surface);
+    transform: translateY(-1px);
+}
+
+/* ==========================================
+   3. HORIZONTAL PRODUCT CATEGORIES BAR
+   ========================================== */
+.products-icons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--bg-surface);
+    padding: 1.2rem 4%;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border-light);
+    gap: 1rem;
+    overflow-x: auto;
+}
+
+.products-icons::-webkit-scrollbar {
+    display: none;
+}
+
+.products-icons .icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    gap: 0.6rem;
+    min-width: 70px;
+    transition: all 0.25s ease;
+}
+
+.products-icons .icon i {
+    font-size: 1.25rem;
+    color: #475569;
+    background-color: #f8fafc;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid var(--border-light);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.products-icons .icon .text-name {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    transition: color 0.25s ease;
+}
+
+/* High-End Micro-Interactions on Categories Hover */
+.products-icons .icon:hover i {
+    color: var(--bg-surface);
+    background-color: var(--text-main);
+    border-color: var(--text-main);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(15, 23, 42, 0.1);
+}
+
+.products-icons .icon:hover .text-name {
+    color: var(--text-main);
+}
+
+/* ==========================================
+   4. COMMERCIAL FEATURED PROMO BANNERS
+   ========================================== */
+.offer-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    padding: 0 4%;
+    margin-bottom: 3.5rem;
+}
+
+.offer-items {
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: var(--bg-surface);
+    box-shadow: var(--shadow-premium);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.offer-items:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-hover);
+}
+
+.offer-items img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* ==========================================
+   5. PREMIUM PRODUCT CARD MASONRY GRID
+   ========================================== */
+.normal-items-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 1.8rem;
+    padding: 0 4% 4rem 4%;
+}
+
+.normal-items {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: 20px;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: var(--shadow-premium);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+}
+
+.normal-items:hover {
+    transform: translateY(-5px);
+    border-color: #cbd5e1;
+    box-shadow: var(--shadow-hover);
+}
+
+/* Beautiful Rounded Contemporary Product Shell Frames */
+.normal-items img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 14px;
+    margin-bottom: 0.85rem;
+    background-color: #f1f5f9;
+}
+
+.normal-items .item-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-main);
+    letter-spacing: -0.01em;
+    text-align: center;
+    padding-bottom: 0.25rem;
+}
+
+/* ==========================================
+   6. RESPONSIVE DESIGN ARCHITECTURE
+   ========================================== */
+@media (max-width: 1024px) {
+    .offer-bar {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+    }
+    .search-bar {
+        width: 45%;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem 4%;
+    }
+    .search-bar {
+        width: 100%;
+    }
+    .nav-icons {
+        gap: 1.25rem;
+        width: 100%;
+        justify-content: center;
+    }
+    .offer-bar {
+        grid-template-columns: 1fr;
+    }
+    .normal-items-bar {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+}
+    </style>
+     
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <img src="{{url_for('static',filename='images/shopkartlogo.png')}}">
+        </div>
+
+        
+    <div class="search-bar">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="Search Your Products.......">
+
+    </div>
+        <div class="nav-icons">
+            <a href="{{url_for('logino')}}">LOGIN</a>
+            <a href="{{url_for('home')}}">HOME</a>
+           
+            <a href="{{url_for('selltous')}}">SELL TO US</a>
+            <a href="{{url_for('about_us')}}">ABOUT US</a>
+
+        </div>
+        <div class="end-nav-icon">
+            <a href="{{url_for('cart')}}">CART</a>
+        </div>
+    </div>
+
+
+    <div class="products-icons">
+        <a href="/category/fashion" class="icon">
+
+        <i class="fa-solid fa-shirt"></i>
+        <p class="text-name">Fashion</p>
+        </a>
+
+        <a href="/category/specs" class="icon">
+        <i class="fa-solid fa-glasses"></i>
+        <p class="text-name">Spects</p>
+        </a>
+
+        <a href="/category/mobiles" class="icon">
+        <i class="fa-solid fa-mobile"></i>
+        <p class="text-name">Mobiles</p>
+        </a>
+
+        <a href="/category/beauty" class="icon">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+        <p class="text-name">Beauty</p>
+        </a>
+
+        <a href="/category/electronics" class="icon">
+        <i class="fa-solid fa-tv"></i>
+        <p class="text-name">Electronics</p>
+        </a>
+
+        <a href="/category/home" class="icon">
+        <i class="fa-solid fa-house"></i>
+        <p class="text-name">Home</p>
+        </a>
+
+        <a href="/category/applicants" class="icon">
+        <i class="fa-solid fa-fan"></i>
+        <p class="text-name">Apllicants</p>
+        </a>
+
+        <a href="/category/games" class="icon">
+        <i class="fa-solid fa-gamepad"></i>
+        <p class="text-name">Games</p>
+        </a>
+
+        <a href="/category/food" class="icon">
+        <i class="fa-solid fa-burger"></i>
+        <p class="text-name">Food</p>
+        </a>
+
+        <a href="/category/auto" class="icon">
+        <i class="fa-solid fa-car"></i>
+        <p class="text-name">Auto</p>
+        </a>
+
+        <a href="/category/sports" class="icon">
+        <i class="fa-solid fa-football"></i>
+        <p class="text-name">Sports</p>
+        </a>
+
+        <a href="/category/book" class="icon">
+        <i class="fa-solid fa-book"></i>
+        <p class="text-name">Books</p>
+        </a>
+
+        <a href="/category/furniture" class="icon">
+        <i class="fa-solid fa-couch"></i>
+        <p class="text-name">Furniture</p>
+        </a>
+
+        <a href="/category/twowheelers" class="icon">
+        <i class="fa-solid fa-motorcycle"></i>
+        <p class="text-name">2 wheelers</p>
+        </a>
+    </div>
+
+    <div class="offer-bar">
+        <div class="offer-items">
+            <img src="{{url_for('static',filename='images/mobile1.jpg')}}" loading="lazy" decoding="async" alt="feature-icons">
+        </div>
+        <div class="offer-items">
+            <img src="{{url_for('static',filename='images/mobile2.jpg')}}" loading="lazy" decoding="async" alt="feature-icons">
+        </div>
+        <div class="offer-items">
+            <img src="{{url_for('static',filename='images/item3.jpg')}}" loading="lazy" decoding="async" alt="feature-icons">
+        </div>
+        <div class="offer-items">
+            <img src="{{url_for('static',filename='images/item4.jpg')}}" loading="lazy" decoding="async" alt="feature-icons">
+        </div>
+        <!-- <div class="offer-items">
+            <img src="/static/images/item5.jpg">
+        </div>
+        <div class="offer-items">
+            <img src="/static/images/item6.jpg">
+        </div> -->
+    </div>
+
+    <div class="normal-items-bar">
+
+
+        <div class="normal-items">
+            <img src="{{url_for('static',filename='images/trends.jpg')}}" loading="lazy" decoding="async" alt="feature-icons">
+            <p class="item-name">Trends</p>
+
+        </div>
+        <div class="normal-items">
+            <img src="{{url_for('static',filename='images/shirt,tees.jpg')}}" loading="lazy" decoding="async" alt="feature-icons">
+            <p class="item-name">Shirt,Tees</p>
+        </div>
+        <div class="normal-items">
+            <img src="{{url_for('static',filename='images/jeans.jpg')}}" loading="lazy" decoding="async" alt="feature-icons">
+            <p class="item-name">Jeans</p>
+        </div>
+        <div class="normal-items">
+            <img src="{{url_for('static',filename='images/sportshoe1.jpg')}}" loading="lazy" decoding="async" alt="feature-icons">
+            <p class="item-name">Sports shoe</p>
+        </div>
+        <div class="normal-items">
+            <img src="{{url_for('static',filename='images/watches.jpg')}}" loading="lazy" decoding="async" alt="feature-icons">
+            <p class="item-name">watches</p>
+        </div>
+        <div class="normal-items">
+            <img src="{{url_for('static',filename='images/kidsclothing.jpg')}}" loading="lazy" decoding="async" alt="feature-icons">
+            <p class="item-name">Kidsclothing</p>
+        </div>        
+        <div class="normal-items">
+            <img src="{{url_for('static',filename='images/luggage.jpg')}}" loading="lazy" decoding="async" alt="feature-icons">
+            <p class="item-name">Luggage</p>
+        </div>
+        <div class="normal-items">
+            <img src="{{url_for('static',filename='images/trackpants.jpg')}}" loading="lazy" decoding="async" alt="feature-icons">
+            <p class="item-name">Trackpants</p>
+        </div>
+        <div class="normal-items">
+            <img src="{{url_for('static',filename='images/casualwaer.jpg')}}" loading="lazy" decoding="async" alt="feature-icons">
+            <p class="item-name">casualwaer</p>
+        </div>
+        <div class="normal-items">
+            <img src="{{url_for('static',filename='images/kurta.jpg')}}" loading="lazy" decoding="async" alt="feature-icons">
+            <p class="item-name">Kurta</p>
+        </div>
+        <div class="normal-items">
+            <img src="{{url_for('static',filename='images/top50.jpg')}}" loading="lazy" decoding="async" alt="feature-icons">
+            <p class="item-name">Top 50 Deals</p>
+        </div>
+        <div class="normal-items">
+            <img src="{{url_for('static',filename='images/kurtaset.jpg')}}" loading="lazy" decoding="async" alt="feature-icons">
+            <p class="item-name">Kurtaset</p>
+        </div>
+        <div class="normal-items">
+            <img src="{{url_for('static',filename='images/dresses.jpg')}}" loading="lazy" decoding="async" alt="feature-icons">
+            <p class="item-name">Dresses</p>
+        </div>
+        <div class="normal-items">
+            <img src="{{url_for('static',filename='images/asualshoes.jpg')}}" loading="lazy" decoding="async" alt="feature-icons">
+            <p class="item-name">Casualshoes</p>
+        </div>
+        <div class="normal-items">
+            <img src="{{url_for('static',filename='images/trolley.jpg')}}" loading="lazy" decoding="async" alt="feature-icons">
+            <p class="item-name">Trolley</p>
+
+        </div>
+        <div class="normal-items">
+            <img src="{{url_for('static',filename='images/jewellery.jpg')}}" loading="lazy" decoding="async" alt="feature-icons">
+            <p class="item-name">Jewellery</p>
+        </div>
+        <div class="normal-items">
+            <img src="{{url_for('static',filename='images/sarees.jpg')}}" loading="lazy" decoding="async" alt="feature-icons">
+            <p class="item-name">Sarees</p>
+        </div>
+        <div class="normal-items">
+            <img src="{{url_for('static',filename='images/jeans (2).jpg')}}" loading="lazy" decoding="async" alt="feature-icons">
+            <p class="item-name">Jeans</p>
+        </div>
+        <div class="normal-items">
+            <img src="{{url_for('static',filename='images/sportshoe2.jpg')}}" loading="lazy" decoding="async" alt="feature-icons">
+            <p class="item-name">Sportshoes</p>
+        </div>
+    
+        <div class="normal-items">
+            <img src="{{url_for('static',filename='images/kurtis.jpg')}}" loading="lazy" decoding="async" alt="feature-icons">
+            <p class="item-name">Kurtis</p>
+        </div>
+    </div>
+
+
+</body>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E Commerce Shopping</title>
+    <!-- <link rel="stylesheet" href="/static/css/index.css">  -->
+    <style>
+        /* ==========================================
+   1. PREMIUM SETUP & MODERN RESET
+   ========================================== */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --bg-main: #f8fafc;        /* Soft crisp clean cream background */
+    --bg-surface: #ffffff;     /* Pure white card backgrounds */
+    --text-main: #0f172a;      /* Deep luxurious slate-black for text */
+    --text-muted: #64748b;     /* Elegant soft grey for subtext */
+    --accent-blue: #2563eb;    /* Premium digital brand blue */
+    --accent-glow: rgba(37, 99, 235, 0.06);
+    --border-light: #e2e8f0;   /* Subtle edge line styling */
+    --font-global: 'Plus Jakarta Sans', sans-serif;
+    --shadow-card: 0 20px 40px -15px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(15, 23, 42, 0.04);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    font-family: var(--font-global);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==========================================
+   2. LUXURY STANDALONE NAVIGATION BAR
+   ========================================== */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--bg-surface);
+    padding: 1rem 6%;
+    border-bottom: 1px solid var(--border-light);
+    width: 100%;
+}
+
+.navbar .logo {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-main);
+}
+
+.nav-icons {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+}
+
+.nav-icons a, .end-nav-icon a {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    transition: color 0.25s ease;
+}
+
+.nav-icons a:hover, .end-nav-icon a:hover {
+    color: var(--text-main);
+}
+
+/* Highlighted "MORE" link styling */
+.end-nav-icon a {
+    border: 1px solid var(--border-light);
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+    background-color: #f8fafc;
+}
+
+.end-nav-icon a:hover {
+    background-color: #f1f5f9;
+}
+
+/* ==========================================
+   3. INTEGRATED CENTALIZED SEARCH BAR
+   ========================================== */
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 0 1.2rem;
+    width: 400px;
+    height: 44px;
+    margin: 2.5rem auto 1.5rem auto;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px -2px rgba(15, 23, 42, 0.02);
+}
+
+.search-bar:focus-within {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 4px var(--accent-glow);
+}
+
+.search-bar i {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-right: 0.75rem;
+}
+
+.search-bar input {
+    border: none;
+    background: transparent;
+    width: 100%;
+    height: 100%;
+    outline: none;
+    color: var(--text-main);
+    font-family: var(--font-global);
+    font-size: 0.9rem;
+}
+
+/* ==========================================
+   4. LUXURY TWO-PANEL SPLIT CARD DESIGN
+   ========================================== */
+.login-form {
+    background-color: var(--bg-surface);
+    max-width: 900px;
+    width: calc(100% - 3rem);
+    margin: 1rem auto 4rem auto;
+    border-radius: 24px;
+    box-shadow: var(--shadow-card);
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    overflow: hidden;
+    position: relative;
+    min-height: 520px;
+}
+
+/* Left Accent Side Panel (Info & Imagery Context) */
+.login-img {
+    background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+    padding: 3.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #ffffff;
+    position: relative;
+}
+
+.login-img::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.15) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.login-img h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+}
+
+.login-img p {
+    color: #93c5fd;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    font-weight: 400;
+}
+
+/* Right Content Form Shell Panel */
+.login-otp, .verify_otp, .register-form {
+    padding: 4rem 3.5rem 2rem 3.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Hide register form dynamically by default as structural baseline */
+.register-form {
+    display: none;
+}
+
+/* ==========================================
+   5. MODERN PREMIUM FORM ELEMENTS
+   ========================================= */
+input[type="text"],
+input[type="email"],
+input[type="number"] {
+    width: 100%;
+    background-color: #f8fafc;
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 0.9rem 1.2rem;
+    color: var(--text-main);
+    font-family: var(--font-global);
+    font-size: 0.95rem;
+    transition: all 0.25s ease;
+    outline: none;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus {
+    background-color: var(--bg-surface);
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 4px var(--accent-glow);
+}
+
+/* Actions & Button Branding Treatments */
+.otp-button, .verify-button, .register-button {
+    width: 100%;
+    background-color: var(--text-main);
+    color: var(--bg-surface);
+    border: none;
+    border-radius: 10px;
+    padding: 1rem;
+    font-family: var(--font-global);
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    margin-top: 0.5rem;
+}
+
+.otp-button:hover, .verify-button:hover, .register-button:hover {
+    background-color: var(--accent-blue);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px -6px rgba(37, 99, 235, 0.3);
+}
+
+/* Switch Navigation Text Prompt Placement */
+.bottom-register-note {
+    grid-column: 2;
+    padding: 0 3.5rem 3.5rem 3.5rem;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 0.2s ease;
+    margin-top: -1rem; /* Visually aligns elegantly below active layout frames */
+}
+
+.bottom-register-note:hover {
+    color: var(--accent-blue);
+    text-decoration: underline;
+}
+
+/* Errors & Verification Alerts Messaging */
+.error-msg, .verify-error {
+    color: #dc2626;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+/* ==========================================
+   6. RESPONSIVE MEDIA ARCHITECTURE
+   ========================================== */
+@media (max-width: 860px) {
+    .login-form {
+        grid-template-columns: 1fr;
+        min-height: auto;
+    }
+    .login-img {
+        padding: 3rem 2.5rem;
+    }
+    .login-otp, .verify_otp, .register-form {
+        padding: 3rem 2.5rem 1.5rem 2.5rem;
+    }
+    .bottom-register-note {
+        grid-column: 1;
+        padding: 0 2.5rem 3rem 2.5rem;
+    }
+    .search-bar {
+        width: calc(100% - 12%);
+    }
+    .navbar {
+        padding: 1rem 4%;
+    }
+}
+    </style>
+     
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <!-- logo -->
+        </div>
+        <div class="nav-icons">
+            <a href="{{url_for('logino')}}">LOGIN</a>
+            <a href="{{url_for('home')}}">HOME</a>
+            <a href="{{url_for('cart')}}">CART</a>
+            <a href="{{url_for('about_us')}}">ABOUT US</a>
+
+        </div>
+        <div class="end-nav-icon">
+            <a href="#">MORE</a>
+        </div>
+    </div>
+
+    <div class="search-bar">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" name="username " placeholder="Search Your Products.......">
+
+    </div>
+
+    <div class="login-form">
+        <div class="login-img">
+            <h2>LOGIN</h2>
+            <p>Get Full accesed details by logining in to the website</p>
+        </div>
+        {% if login %}
+        
+        <form action="{{url_for('login_details')}}" method="POST" class="login-otp">
+            <input type="text" name="username" class="username" placeholder="Enter Email Id..."><br><br>
+            <button type="submit" class="otp-button">Request For OTP</button><br>
+            {% if error_username %}
+            <p class="error-msg">{{error_username}}</p>
+            {% endif %}
+        </form>
+        {% endif %}
+
+
+            
+        <p class="bottom-register-note">New To E commerce Website??Register Your Account Here!!</p>
+          
+            
+          {% if verify %}  
+        <form action="{{url_for('verify_otp')}}" method="POST" class="verify_otp">
+            <input type="text" name="otp" class="otp" placeholder="Enter Your OTP "><br><br>
+            <button type="submit" class="verify-button">LOGIN</button>
+            
+            {% if invalid_otp %}
+            <p class="verify-error">{{invalid_otp}}</p>
+            {% endif %}
+        </form>
+       {% endif %}
+
+        
+        <form action="{{url_for('register_details')}}" method="POST" class="register-form">
+            <input type="text" name="user_name" placeholder="Enter Your Username.."><br><br>
+            <input type="email" name="email_id" placeholder="Enter Your email id.."><br><br>
+            <input type="text" name="password_hash" placeholder="Enter Your password.."><br><br>
+            <input type="number" name="mobile_no" maxlength="10" placeholder="Enter Your mobile number.."><br><br>
+
+            <button type="submit" class="register-button">REGISTER</button>
+
+        </form>
+        
+    </div>
+    <script>
+       
+        const login_otp_form=document.querySelector('.login-otp');
+        const register_form_button=document.querySelector('.register-form');
+        const bottom_register_button=document.querySelector('.bottom-register-note');
+        bottom_register_button.addEventListener("click",function(){
+            login_otp_form.style.display="none";
+            register_form_button.style.display="block";
+        }
+
+        );
+
+    </script>
+</body>
+</html>

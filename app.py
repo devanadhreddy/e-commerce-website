@@ -79,7 +79,7 @@ def send_otp_email(username, otp):
     msg["From"] = sender_email
     msg["To"] = username
 
-    with smtplib.SMTP_SSL("smtp.gmail.com", 485,timeout=10) as server:
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465,timeout=10) as server:
         
         server.login(sender_email, app_password)
         server.send_message(msg)

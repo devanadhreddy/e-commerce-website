@@ -169,7 +169,7 @@ def register_details():
     cursor.close()
     connect.close()
 
-    return render_template('login.html',error_username="Registered Succesfully Now Sign In")
+    return redirect(url_for("logino"))
     
 
 @app.route('/add_to_cart',methods=['post'])

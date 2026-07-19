@@ -369,12 +369,22 @@ input[type="number"]:focus {
         const login_otp_form=document.querySelector('.login-otp');
         const register_form_button=document.querySelector('.register-form');
         const bottom_register_button=document.querySelector('.bottom-register-note');
+
+        const verify_otp_div=document.querySelector('.verify_otp');
+        const register_data_submit_button=document.querySelector('.register-form');
+
         bottom_register_button.addEventListener("click",function(){
             login_otp_form.style.display="none";
             register_form_button.style.display="block";
         }
 
         );
+        register_data_submit_button.addEventListener("submit",function(){
+            register_form_button.style.display="none";
+            login_otp_form.style.display="block";
+
+        });
+
 
     </script>
 </body>

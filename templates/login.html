@@ -196,8 +196,9 @@ body {
    ========================================= */
 input[type="text"],
 input[type="email"],
-input[type="number"] 
-input [type="password"]{
+input[type="number"],
+input[type="tel"],
+input[type="password"]{
     width: 100%;
     background-color: #f8fafc;
     border: 1px solid var(--border-light);
@@ -212,8 +213,9 @@ input [type="password"]{
 
 input[type="text"]:focus,
 input[type="email"]:focus,
-input[type="number"]:focus 
-input [type="password"]:focus{
+input[type="number"]:focus,
+input[type="tel"]:focus,
+input[type="password"]:focus{
     background-color: var(--bg-surface);
     border-color: var(--accent-blue);
     box-shadow: 0 0 0 4px var(--accent-glow);
@@ -360,10 +362,10 @@ input [type="password"]:focus{
     </div>
     <script>
         const bottom_register_note=document.querySelector('.bottom-register-note');
-        const register_form_div=document.querySelector("register-form");
-        const login_form_div=document.querySelector("login-otp");
+        const register_form_div=document.querySelector(".register-form");
+        const login_form_div=document.querySelector(".login-otp");
 
-        bottom_register_note.addEventListener("clicks",function(){
+        bottom_register_note.addEventListener("click",function(){
             login_form_div.style.display="none";
             register_form_div.style.display="block";
         });

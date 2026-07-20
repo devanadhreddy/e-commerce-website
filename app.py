@@ -9,6 +9,7 @@ from mysql.connector import pooling
 from dotenv import load_dotenv
 import os
 from werkzeug.security import generate_password_hash
+import resend
 
 load_dotenv()
 
@@ -55,7 +56,7 @@ def category(category_name):
     connect=connection()
     cursor=connect.cursor()
     cursor.execute(
-        '''SELECT * FROM ecommerce.products WHERE category_name=%s''',(category_name,)
+        '''SELECT * FROM defaultdb.products WHERE category_name=%s''',(category_name,)
     )
 
     products=cursor.fetchall()
@@ -71,18 +72,21 @@ def logino():
 
 
 def send_otp_email(username, otp):
-    sender_email = os.getenv("SENDER_EMAIL")
-    app_password =  os.getenv("GOOGLE_APP_PASSWORD")
+    # Set your Resend API key
+    resend.api_key = os.getenv("RESEND_API_KEY")
 
-    msg = MIMEText(f"Your OTP is: {otp}")
-    msg["Subject"] = "Email Verification OTP"
-    msg["From"] = sender_email
-    msg["To"] = username
+    # Define the email parameters
+    params = {
+        # Use 'onboarding@resend.dev' during testing.
+        # Once your custom domain is verified, change it to something like 'no-reply@yourdomain.com'
+        "from": "Your App <onboarding@resend.dev>",
+        "to": [username],  # username is the recipient's email
+        "subject": "Email Verification OTP",
+        "html": f"<p>Your OTP is: <strong>{otp}</strong></p>",
+    }
 
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465,timeout=10) as server:
-        
-        server.login(sender_email, app_password)
-        server.send_message(msg)
+    # Send email via HTTPS API (No SMTP timeout issues on Render)
+    return resend.Emails.send(params)
 
 @app.route('/login_details',methods=['post'])
 def login_details():
@@ -92,7 +96,7 @@ def login_details():
     
     
     username=request.form["username"]
-    cursor.execute(''' SELECT id,user_name FROM ecommerce.account_details WHERE email_id=%s''',(username,))
+    cursor.execute(''' SELECT id,user_name FROM defaultdb.account_details WHERE email_id=%s''',(username,))
 
     user_details=cursor.fetchall()
     
@@ -124,7 +128,7 @@ def verify_otp():
     connect=connection()
     cursor=connect.cursor()
 
-    query=''' SELECT otp FROM ecommerce.login_details WHERE email_mobile=%s ORDER BY id DESC LIMIT 1'''
+    query=''' SELECT otp FROM defaultdb.login_details WHERE email_mobile=%s ORDER BY id DESC LIMIT 1'''
 
     cursor.execute(query,(username,))
     stored_otp=cursor.fetchone()
@@ -132,12 +136,12 @@ def verify_otp():
     
 
     if entered_otp==stored_otp_2:
-        cursor.execute(''' SELECT id FROM ecommerce.account_details WHERE email_id=%s''',(username,))
+        cursor.execute(''' SELECT id FROM defaultdb.account_details WHERE email_id=%s''',(username,))
         user_id=cursor.fetchone()
         
         session['user_id']=user_id[0]
         session['email_id']=username    ## otp should be deleted make sure tgis to remainder
-        cursor.execute(''' DELETE FROM ecommerce.login_details WHERE email_mobile=%s''',(username,))
+        cursor.execute(''' DELETE FROM defaultdb.login_details WHERE email_mobile=%s''',(username,))
         connect.commit()
 
         cursor.close()
@@ -180,7 +184,7 @@ def add_to_cart():
     cursor=connect.cursor()
     user_id=session.get('user_id')
 
-    cursor.execute(''' Select * from ecommerce.cart where user_id=%s AND product_id=%s''',(user_id,product_id,))
+    cursor.execute(''' Select * from defaultdb.cart where user_id=%s AND product_id=%s''',(user_id,product_id,))
     cart_details=cursor.fetchone()
 
     if cart_details:
@@ -243,7 +247,7 @@ def update_quantity():
     cursor=connect.cursor()
     user_id=session.get('user_id')
 
-    cursor.execute(''' UPDATE ecommerce.cart SET quantity=%s WHERE user_id=%s AND product_id=%s''',(new_qty,user_id,produt_id))
+    cursor.execute(''' UPDATE defaultdb.cart SET quantity=%s WHERE user_id=%s AND product_id=%s''',(new_qty,user_id,produt_id))
     connect.commit()
 
     cursor.execute(''' SELECT p.id,p.name,p.price,p.image,c.id,c.quantity FROM cart c INNER JOIN products p ON c.product_id= p.id WHERE c.user_id=%s''',(user_id,))
@@ -276,7 +280,7 @@ def delete_product_details():
     cursor=connect.cursor()
 
     user_id=session.get('user_id')
-    cursor.execute(" SELECT c.quantity,p.price FROM ecommerce.products p INNER JOIN cart c ON p.id=c.product_id WHERE (c.user_id=%s AND c.product_id=%s) ",(user_id,product_id))
+    cursor.execute(" SELECT c.quantity,p.price FROM defaultdb.products p INNER JOIN cart c ON p.id=c.product_id WHERE (c.user_id=%s AND c.product_id=%s) ",(user_id,product_id))
     products=cursor.fetchall()
     updated_total=0
     
@@ -316,7 +320,7 @@ def save_address():
     connect=connection()
     cursor=connect.cursor()
     user_id=session.get("user_id")
-    cursor.execute(''' INSERT INTO ecommerce.address(user_id,fullname,phone,street,city,state,pincode,country) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)''',(user_id,fullname,phone,street,city,state,pincode,country))
+    cursor.execute(''' INSERT INTO defaultdb.address(user_id,fullname,phone,street,city,state,pincode,country) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)''',(user_id,fullname,phone,street,city,state,pincode,country))
     connect.commit()
     cursor.close()
     connect.close()
@@ -336,11 +340,11 @@ def buynow():
     cursor=connect.cursor()
     data=request.get_json()
     user_id=session.get('user_id')
-    cursor.execute("SELECT fullname,phone,street,city,state,pincode,country FROM ecommerce.address WHERE user_id=%s",(user_id,))
+    cursor.execute("SELECT fullname,phone,street,city,state,pincode,country FROM defaultdb.address WHERE user_id=%s",(user_id,))
     address=cursor.fetchall()
     
     product_id=data['product_id']
-    cursor.execute("SELECT name,price,image FROM ecommerce.products WHERE id=%s",(product_id,))
+    cursor.execute("SELECT name,price,image FROM defaultdb.products WHERE id=%s",(product_id,))
     product_details=cursor.fetchone()
     updated_total=0
     product_name=product_details[0]
@@ -374,7 +378,7 @@ def address_details():
     cursor=connect.cursor()
     
     user_id=session.get('user_id')
-    cursor.execute("SELECT fullname,phone,street,city,state,pincode,country FROM ecommerce.address WHERE user_id=%s",(user_id,))
+    cursor.execute("SELECT fullname,phone,street,city,state,pincode,country FROM defaultdb.address WHERE user_id=%s",(user_id,))
     address=cursor.fetchall()
     cursor.close()
     connect.close()

@@ -8,7 +8,7 @@ import time
 from mysql.connector import pooling
 from dotenv import load_dotenv
 import os
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash,check_password_hash
 import resend
 
 load_dotenv()
@@ -49,7 +49,8 @@ def connection():
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    username=session.get("user_name")
+    return render_template('index.html',username=username)
 
 @app.route('/category/<category_name>')
 def category(category_name):
@@ -67,90 +68,48 @@ def category(category_name):
 
 @app.route('/logino')
 def logino():
-    return render_template('login.html',login=True)
+    return render_template('login.html')
 
 
 
-def send_otp_email(username, otp):
-    # Set your Resend API key
-    resend.api_key = os.getenv("RESEND_API_KEY")
 
-    # Define the email parameters
-    params = {
-        # Use 'onboarding@resend.dev' during testing.
-        # Once your custom domain is verified, change it to something like 'no-reply@yourdomain.com'
-        "from": "Your App <onboarding@resend.dev>",
-        "to": [username],  # username is the recipient's email
-        "subject": "Email Verification OTP",
-        "html": f"<p>Your OTP is: <strong>{otp}</strong></p>",
-    }
-
-    # Send email via HTTPS API (No SMTP timeout issues on Render)
-    return resend.Emails.send(params)
 
 @app.route('/login_details',methods=['post'])
 def login_details():
     
     connect=connection()
-    cursor=connect.cursor()
+    cursor=connect.cursor(dictionary=True)
     
     
-    username=request.form["username"]
-    cursor.execute(''' SELECT id,user_name FROM account_details WHERE email_id=%s''',(username,))
+    username=request.form["email_id"]
+    password=request.form["password"]
+    cursor.execute(''' SELECT id,user_name,email_id,password_hash FROM account_details WHERE email_id=%s ''',(username,))
 
-    user_details=cursor.fetchall()
+    user_details=cursor.fetchone()
+    original_name=user_details["user_name"]
+    original_password=check_password_hash(user_details["password_hash"],password)
     
-    if user_details:
+    if (username== original_name) and (original_password):
 
-        session["pending_login"]=username
-        otp=str(random.randint(100000,999999))
-        query='''INSERT  INTO login_details (email_mobile,otp) VALUES(%s,%s)'''
-        cursor.execute(query,(username,otp))
-        connect.commit()
-
-        send_otp_email(username,otp)
+        session["user_id"]=user_details["id"]
+        session['user_name']=user_details["user_name"]
+       
 
         cursor.close()
         connect.close()
 
 
-        return render_template('login.html',verify=True)
+        return render_template('login.html')
+    elif original_password:
+        return render_template('login.html',error_username="You Username is Wrong Please check!!!")
+    elif (username== original_name):
+        return render_template('login.html',error_username="You password is Wrong Please check!!!")
+
     else:
-        return render_template('login.html',login=True,error_username="You Do Not Have An Account With This username--Register One")
+        return render_template('login.html',error_username="You Do Not Have Account With this Credentials!!!")
 
-@app.route('/verify_otp',methods=['post'])
-def verify_otp():
-    username=session.get("pending_login")
-   
 
-    entered_otp=request.form['otp']
-    
-    connect=connection()
-    cursor=connect.cursor()
 
-    query=''' SELECT otp FROM login_details WHERE email_mobile=%s ORDER BY id DESC LIMIT 1'''
-
-    cursor.execute(query,(username,))
-    stored_otp=cursor.fetchone()
-    stored_otp_2=str(stored_otp[0]).strip()
-    
-
-    if entered_otp==stored_otp_2:
-        cursor.execute(''' SELECT id FROM account_details WHERE email_id=%s''',(username,))
-        user_id=cursor.fetchone()
-        
-        session['user_id']=user_id[0]
-        session['email_id']=username    ## otp should be deleted make sure tgis to remainder
-        cursor.execute(''' DELETE FROM login_details WHERE email_mobile=%s''',(username,))
-        connect.commit()
-
-        cursor.close()
-        connect.close()
-        session.pop('pending_login', None)
-        return redirect('/')
-
-    else: 
-        return render_template("login.html",invalid_otp="Invalid OTP Try Again",verify=True)
 
 
 

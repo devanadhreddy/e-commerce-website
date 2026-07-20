@@ -196,7 +196,8 @@ body {
    ========================================= */
 input[type="text"],
 input[type="email"],
-input[type="number"] {
+input[type="number"] 
+input [type="password"]{
     width: 100%;
     background-color: #f8fafc;
     border: 1px solid var(--border-light);
@@ -211,7 +212,8 @@ input[type="number"] {
 
 input[type="text"]:focus,
 input[type="email"]:focus,
-input[type="number"]:focus {
+input[type="number"]:focus 
+input [type="password"]:focus{
     background-color: var(--bg-surface);
     border-color: var(--accent-blue);
     box-shadow: 0 0 0 4px var(--accent-glow);
@@ -325,39 +327,31 @@ input[type="number"]:focus {
             <h2>LOGIN</h2>
             <p>Get Full accesed details by logining in to the website</p>
         </div>
-        {% if login %}
+       
         
         <form action="{{url_for('login_details')}}" method="POST" class="login-otp">
-            <input type="text" name="username" class="username" placeholder="Enter Email Id..."><br><br>
-            <button type="submit" class="otp-button">Request For OTP</button><br>
+            <input type="email" name="email_id" class="username" placeholder="Enter Email Id..."><br><br>
+            <input type="password" name="password" class="username" placeholder="Password..."><br><br>
+            <button type="submit" class="otp-button">LOGIN</button><br>
             {% if error_username %}
             <p class="error-msg">{{error_username}}</p>
             {% endif %}
         </form>
-        {% endif %}
+      
 
 
             
         <p class="bottom-register-note">New To E commerce Website??Register Your Account Here!!</p>
           
             
-          {% if verify %}  
-        <form action="{{url_for('verify_otp')}}" method="POST" class="verify_otp">
-            <input type="text" name="otp" class="otp" placeholder="Enter Your OTP "><br><br>
-            <button type="submit" class="verify-button">LOGIN</button>
-            
-            {% if invalid_otp %}
-            <p class="verify-error">{{invalid_otp}}</p>
-            {% endif %}
-        </form>
-       {% endif %}
+
 
         
         <form action="{{url_for('register_details')}}" method="POST" class="register-form">
             <input type="text" name="user_name" placeholder="Enter Your Username.."><br><br>
             <input type="email" name="email_id" placeholder="Enter Your email id.."><br><br>
             <input type="text" name="password_hash" placeholder="Enter Your password.."><br><br>
-            <input type="number" name="mobile_no" maxlength="10" placeholder="Enter Your mobile number.."><br><br>
+            <input type="tel" name="mobile_no" maxlength="10" inputmode="numeric" oninput="this.value = this.value.replace(/\D/g, '')" placeholder="Enter Your mobile number.."><br><br>
 
             <button type="submit" class="register-button">REGISTER</button>
 
@@ -365,25 +359,18 @@ input[type="number"]:focus {
         
     </div>
     <script>
-       
-        const login_otp_form=document.querySelector('.login-otp');
-        const register_form_button=document.querySelector('.register-form');
-        const bottom_register_button=document.querySelector('.bottom-register-note');
+        const bottom_register_note=document.querySelector('.bottom-register-note');
+        const register_form_div=document.querySelector("register-form");
+        const login_form_div=document.querySelector("login-otp");
 
-        const verify_otp_div=document.querySelector('.verify_otp');
-        const register_data_submit_button=document.querySelector('.register-form');
-
-        bottom_register_button.addEventListener("click",function(){
-            login_otp_form.style.display="none";
-            register_form_button.style.display="block";
-        }
-
-        );
-        register_data_submit_button.addEventListener("submit",function(){
-            register_form_button.style.display="none";
-            login_otp_form.style.display="block";
-
+        bottom_register_note.addEventListener("clicks",function(){
+            login_form_div.style.display="none";
+            register_form_div.style.display="block";
         });
+
+
+       
+
 
 
     </script>

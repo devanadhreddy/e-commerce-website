@@ -101,7 +101,7 @@ def login_details():
         connect.close()
 
 
-        return render_template('login.html')
+        return redirect(url_for('/'))
     elif original_password:
         return render_template('login.html',error_username="You Username is Wrong Please check!!!")
     elif (username== original_name):

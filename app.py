@@ -86,8 +86,10 @@ def login_details():
     cursor.execute(''' SELECT id,user_name,email_id,password_hash FROM account_details WHERE email_id=%s ''',(username,))
 
     user_details=cursor.fetchone()
-    original_name=user_details["user_name"]
+   
+    original_name=user_details["email_id"]
     original_password=check_password_hash(user_details["password_hash"],password)
+    
     
     if (username== original_name) and (original_password):
 

@@ -86,6 +86,7 @@ def login_details():
     cursor.execute(''' SELECT id,user_name,email_id,password_hash FROM account_details WHERE email_id=%s ''',(username,))
 
     user_details=cursor.fetchone()
+  
     if user_details:
                
             original_name=user_details["email_id"]
@@ -102,7 +103,7 @@ def login_details():
                 connect.close()
 
 
-                return redirect(url_for('/'))
+                return redirect(url_for("home"))
             elif original_password:
                 return render_template('login.html',error_username="You Username is Wrong Please check!!!")
             elif (username== original_name):

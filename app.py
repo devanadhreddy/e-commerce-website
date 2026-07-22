@@ -81,8 +81,8 @@ def login_details():
     cursor=connect.cursor(dictionary=True)
     
     
-    username=request.form.get('email','').strip().lower()
-    password=request.form.get('password','').strip()
+    username=request.form["email_id"].strip().lower()
+    password=request.form["password_hash"].strip()
     cursor.execute(''' SELECT id,user_name,email_id,password_hash FROM account_details WHERE email_id=%s ''',(username,))
 
     user_details=cursor.fetchone()

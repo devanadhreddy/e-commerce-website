@@ -333,7 +333,7 @@ input[type="password"]:focus{
         
         <form action="{{url_for('login_details')}}" method="POST" class="login-otp">
             <input type="email" name="email_id" class="username" placeholder="Enter Email Id..."><br><br>
-            <input type="password" name="password" class="username" placeholder="Password..."><br><br>
+            <input type="password" name="password_hash" class="username" placeholder="Password..."><br><br>
             <button type="submit" class="otp-button">LOGIN</button><br>
             {% if error_username %}
             <p class="error-msg">{{error_username}}</p>
